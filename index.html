@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sequential Labs — Software for the comics ecosystem</title>
+<meta name="description" content="Sequential Labs builds open source tools, custom apps, and plugins for every corner of the comics ecosystem.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0e0e;
+  --bg-card: #1a1a1a;
+  --text: #e8e4dc;
+  --text-muted: #8a8680;
+  --text-dim: #5a5754;
+  --accent: #e8a44a;
+  --accent-dim: rgba(232, 164, 74, 0.12);
+  --border: rgba(255, 255, 255, 0.06);
+  --serif: 'Playfair Display', Georgia, serif;
+  --mono: 'DM Mono', 'SF Mono', monospace;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
+  pointer-events: none;
+  z-index: 9999;
+}
+.container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+header { padding: 40px 0 0; }
+.logo-row { display: flex; align-items: center; gap: 14px; }
+.logo-mark {
+  width: 36px; height: 36px;
+  border: 2px solid var(--accent); border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 14px; font-weight: 500;
+  color: var(--accent); letter-spacing: -0.5px;
+}
+.logo-text {
+  font-family: var(--sans); font-size: 15px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+}
+nav {
+  margin-top: 32px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; gap: 24px;
+}
+nav a {
+  font-family: var(--mono); font-size: 12px; color: var(--text-dim);
+  text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s;
+}
+nav a:hover { color: var(--text); }
+nav a.active { color: var(--accent); }
+
+.hero { padding: 80px 0 64px; }
+.hero h1 {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(40px, 7vw, 64px); line-height: 1.08;
+  letter-spacing: -0.02em; color: var(--text); max-width: 640px;
+}
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero-sub {
+  margin-top: 28px; font-size: 17px; line-height: 1.65;
+  color: var(--text-muted); max-width: 540px;
+}
+.status-row {
+  margin-top: 40px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.status-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; background: var(--accent-dim);
+  border: 1px solid rgba(232, 164, 74, 0.2); border-radius: 100px;
+  font-family: var(--mono); font-size: 12px; color: var(--accent);
+}
+.status-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.github-link {
+  font-family: var(--mono); font-size: 12px; color: var(--text-dim);
+  text-decoration: none; border-bottom: 1px solid var(--border);
+  padding-bottom: 1px; transition: color 0.2s, border-color 0.2s;
+}
+.github-link:hover { color: var(--text); border-color: var(--text-dim); }
+
+.what-we-do { padding: 0 0 64px; }
+.section-label {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-dim); margin-bottom: 24px;
+}
+.pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.pillar {
+  padding: 24px 20px; border: 1px solid var(--border);
+  border-radius: 10px; transition: border-color 0.3s;
+}
+.pillar:hover { border-color: rgba(255, 255, 255, 0.1); }
+.pillar-icon {
+  font-family: var(--mono); font-size: 18px; color: var(--accent); margin-bottom: 14px;
+}
+.pillar h3 {
+  font-family: var(--sans); font-size: 14px; font-weight: 600;
+  color: var(--text); margin-bottom: 8px;
+}
+.pillar p { font-size: 13px; line-height: 1.55; color: var(--text-dim); }
+
+.projects { padding: 0 0 64px; }
+.project-cards { display: grid; gap: 16px; }
+.project-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 28px 28px 24px;
+  transition: border-color 0.3s, background 0.3s;
+}
+.project-card:hover { border-color: rgba(255, 255, 255, 0.1); background: #1d1d1d; }
+.project-header {
+  display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px;
+}
+.project-name {
+  font-family: var(--serif); font-size: 28px; font-weight: 400; color: var(--text);
+}
+.project-type {
+  font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+  letter-spacing: 0.06em; padding: 3px 8px;
+  border: 1px solid var(--border); border-radius: 4px;
+}
+.project-desc {
+  font-size: 15px; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px;
+}
+.project-stack { display: flex; gap: 8px; flex-wrap: wrap; }
+.tag {
+  font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+  padding: 4px 10px; background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px; letter-spacing: 0.02em;
+}
+
+.pipeline { padding: 0 0 64px; }
+.pipeline-flow {
+  display: flex; align-items: center; padding: 24px 0; overflow-x: auto;
+}
+.pipeline-node {
+  font-family: var(--mono); font-size: 13px; padding: 10px 18px;
+  white-space: nowrap; border-radius: 6px; flex-shrink: 0;
+}
+.pipeline-node.service {
+  background: var(--accent-dim);
+  border: 1px solid rgba(232, 164, 74, 0.2);
+  color: var(--accent);
+}
+.pipeline-node.dim {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.pipeline-arrow {
+  font-family: var(--mono); font-size: 13px; color: var(--text-dim);
+  padding: 0 10px; flex-shrink: 0;
+}
+
+.cta { padding: 48px 0; border-top: 1px solid var(--border); }
+.cta-inner { display: flex; flex-direction: column; gap: 20px; }
+.cta h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--text); }
+.cta p { font-size: 15px; color: var(--text-muted); line-height: 1.6; max-width: 480px; }
+.cta-links { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 4px; }
+.cta-link {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px;
+  font-family: var(--mono); font-size: 13px; text-decoration: none;
+  border-radius: 8px; transition: all 0.2s;
+}
+.cta-link.primary { background: var(--accent); color: var(--bg); font-weight: 500; }
+.cta-link.primary:hover { background: #f0b05e; }
+.cta-link.secondary {
+  background: transparent; color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.cta-link.secondary:hover { border-color: rgba(255, 255, 255, 0.12); color: var(--text); }
+.cta-link svg { width: 16px; height: 16px; }
+
+footer { padding: 40px 0; border-top: 1px solid var(--border); }
+.footer-inner {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-copy {
+  font-family: var(--mono); font-size: 11px; color: var(--text-dim); letter-spacing: 0.02em;
+}
+.footer-links { display: flex; gap: 20px; }
+.footer-links a {
+  font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+  text-decoration: none; transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--text-muted); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in {
+    opacity: 0; transform: translateY(12px);
+    animation: fadeIn 0.6s ease forwards;
+  }
+  .fade-in:nth-child(1) { animation-delay: 0.1s; }
+  .fade-in:nth-child(2) { animation-delay: 0.2s; }
+  .fade-in:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+  .hero { animation: fadeIn 0.8s ease forwards; }
+}
+@media (max-width: 640px) { .pillars { grid-template-columns: 1fr; } }
+@media (max-width: 540px) {
+  .hero { padding: 56px 0 48px; }
+  .project-card { padding: 20px; }
+  .project-name { font-size: 24px; }
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo-row">
+      <div class="logo-mark">SL</div>
+      <div class="logo-text">Sequential Labs</div>
+    </div>
+    <nav>
+      <a href="#" class="active">home</a>
+      <a href="https://github.com/sequential-labs">github</a>
+      <a href="https://instagram.com/sequentiallabs">instagram</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Software for the <em>comics ecosystem</em></h1>
+    <p class="hero-sub">
+      Sequential Labs builds open source tools, custom applications, and plugins
+      for collectors, retailers, readers, and developers across the comics industry.
+    </p>
+    <div class="status-row">
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        building in public
+      </div>
+      <a href="https://github.com/sequential-labs" class="github-link">github.com/sequential-labs</a>
+    </div>
+  </section>
+
+  <section class="what-we-do">
+    <div class="section-label">What we do</div>
+    <div class="pillars">
+      <div class="pillar fade-in">
+        <div class="pillar-icon">&gt;_</div>
+        <h3>Open source</h3>
+        <p>Core tools for comic automation, discovery, and data — built in the open, free forever.</p>
+      </div>
+      <div class="pillar fade-in">
+        <div class="pillar-icon">&amp;</div>
+        <h3>Custom apps</h3>
+        <p>Bespoke software for shops, publishers, and platforms with needs beyond what's off the shelf.</p>
+      </div>
+      <div class="pillar fade-in">
+        <div class="pillar-icon">+</div>
+        <h3>Plugins</h3>
+        <p>Integrations and extensions for existing tools — readers, managers, storefronts, and more.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="projects">
+    <div class="section-label">Current projects</div>
+    <div class="project-cards">
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div class="project-name">Solicit</div>
+          <div class="project-type">data service</div>
+        </div>
+        <p class="project-desc">
+          The canonical source of upcoming comic release data. Ingests weekly listings,
+          maps them to ComicVine IDs, and serves them to downstream consumers. Drop-in
+          compatible with existing tools like Mylar3.
+        </p>
+        <div class="project-stack">
+          <span class="tag">Go</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">REST API</span>
+          <span class="tag">in development</span>
+        </div>
+      </div>
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div class="project-name">Pullsheet</div>
+          <div class="project-type">application</div>
+        </div>
+        <p class="project-desc">
+          Automated comic acquisition and organization for self-hosters. The modern
+          successor to Mylar3, built for the *arr ecosystem. Pairs with readers like
+          Komga, Kavita, and Panels.
+        </p>
+        <div class="project-stack">
+          <span class="tag">self-hosted</span>
+          <span class="tag">*arr-style</span>
+          <span class="tag">open source</span>
+          <span class="tag">coming soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pipeline">
+    <div class="section-label">How it fits together</div>
+    <div class="pipeline-flow">
+      <div class="pipeline-node dim">Release data</div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-node service">Solicit</div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-node service">Pullsheet</div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-node dim">Komga / Panels / Kavita</div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner">
+      <h2>Follow along or get in touch</h2>
+      <p>Solicit is in active development. Star the repo to follow our progress,
+        or reach out if you have a project in the comics space that needs software.</p>
+      <div class="cta-links">
+        <a href="https://github.com/sequential-labs" class="cta-link primary">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+        <a href="mailto:hello@sequentiallabs.dev" class="cta-link secondary">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/></svg>
+          Get in touch
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-copy">&copy; 2026 Sequential Labs</div>
+      <div class="footer-links">
+        <a href="https://sequentiallabs.dev">sequentiallabs.dev</a>
+        <a href="https://github.com/sequential-labs">source</a>
+      </div>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
